@@ -86,11 +86,11 @@ public class PlayerController : MonoBehaviour
                 break;
             case FacingDirection.Right:
                 playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 45); // 45 degrees up from right
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 75); // 45 degrees up from right
                 break;
             case FacingDirection.Left:
                 playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 135); // 45 degrees up from left
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 75); // 45 degrees up from left
                 break;
             default:
                 break;
