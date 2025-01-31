@@ -7,12 +7,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private PlayerInputActions playerControls;
-    [SerializeField] private Transform firePoint;
+    //[SerializeField] private Transform firePoint;
 
     private Transform playerTransform;
     private InputAction aim;
     private InputAction fire;
+    private InputAction reload;
     private Vector2 aimDirection;
+    private PlayerStateMachine playerStateMachine;
+    private PlayerShoot playerShoot;
 
     private enum FacingDirection { Up, Left, Right }
     private FacingDirection facingDirection = FacingDirection.Up;
@@ -20,7 +23,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerInputActions();
+        playerControls.Enable();
         playerTransform = transform;
+        playerStateMachine = GetComponent<PlayerStateMachine>();
+        playerShoot = GetComponent<PlayerShoot>();
     }
 
     private void OnEnable()
@@ -32,12 +38,17 @@ public class PlayerController : MonoBehaviour
         fire = playerControls.Player.Attack;
         fire.Enable();
         fire.performed += Fire;
+
+        reload = playerControls.Player.Reload;
+        reload.Enable();
+        reload.performed += Reload;
     }
 
     private void OnDisable()
     {
         aim.Disable();
         fire.Disable();
+        reload.Disable();
     }
 
     private void Update()
@@ -70,16 +81,16 @@ public class PlayerController : MonoBehaviour
         switch (facingDirection) 
         {
             case FacingDirection.Up:
-                firePoint.localPosition = new Vector3(0, 1, 0);
-                firePoint.localRotation = Quaternion.Euler(0, 0, 90);
+                playerShoot.firePoint.localPosition = new Vector3(0, 1, 0);
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 0);
                 break;
             case FacingDirection.Right:
-                firePoint.localPosition = new Vector3(-0.866f, 0.5f, 0); // Adjust relative to player
-                firePoint.localRotation = Quaternion.Euler(0, 0, 30); // 30 degrees up from right
+                playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 45); // 45 degrees up from right
                 break;
             case FacingDirection.Left:
-                firePoint.localPosition = new Vector3(-0.866f, 0.5f, 0); // Adjust relative to player
-                firePoint.localRotation = Quaternion.Euler(0, 0, 150); // 30 degrees up from left
+                playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 135); // 45 degrees up from left
                 break;
             default:
                 break;
@@ -88,6 +99,12 @@ public class PlayerController : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext context)
     {
-        Debug.Log("Pew");
+        playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Shooting);
+    }
+
+    private void Reload(InputAction.CallbackContext context)
+    {
+        Debug.Log("Reload Input Received");
+        playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Reloading);
     }
 }
