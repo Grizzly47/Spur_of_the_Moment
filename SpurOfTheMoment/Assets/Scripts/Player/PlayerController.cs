@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private PlayerInputActions playerControls;
-    //[SerializeField] private Transform firePoint;
 
     private Transform playerTransform;
     private InputAction aim;
@@ -16,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 aimDirection;
     private PlayerStateMachine playerStateMachine;
     private PlayerShoot playerShoot;
+    private Animator playerAnimator;
 
     private enum FacingDirection { Up, Left, Right }
     private FacingDirection facingDirection = FacingDirection.Up;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
         playerTransform = transform;
         playerStateMachine = GetComponent<PlayerStateMachine>();
         playerShoot = GetComponent<PlayerShoot>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -57,27 +58,29 @@ public class PlayerController : MonoBehaviour
         // Trashy
         if (aimDirection.y > 0f) // Aiming up
         {
-            spriteRenderer.sprite = sprites[0];
+            playerAnimator.SetInteger("Direction", 0);
+            playerTransform.localScale = new Vector3(1, 1, 1);
             facingDirection = FacingDirection.Up;
         }
         else if (aimDirection.x > 0f) // Aiming right
         {
-            spriteRenderer.sprite = sprites[1];
-            playerTransform.localScale = new Vector3(-1, 1, 1);
+            playerAnimator.SetInteger("Direction", 2);
+            playerTransform.localScale = new Vector3(1, 1, 1);
             facingDirection = FacingDirection.Right;
         }
         else if (aimDirection.x < 0f) // Aiming left
         {
-            spriteRenderer.sprite = sprites[1];
-            playerTransform.localScale = new Vector3(1, 1, 1);
+            playerAnimator.SetInteger("Direction", 1);
+            playerTransform.localScale = new Vector3(-1, 1, 1);
             facingDirection = FacingDirection.Left;
         }
         else
         {
-            spriteRenderer.sprite = sprites[0];
+            playerAnimator.SetInteger("Direction", 0);
             facingDirection = FacingDirection.Up;
         }
 
+        // Can be removed later
         switch (facingDirection) 
         {
             case FacingDirection.Up:
@@ -85,16 +88,17 @@ public class PlayerController : MonoBehaviour
                 playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 0);
                 break;
             case FacingDirection.Right:
-                playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 75); // 45 degrees up from right
+                playerShoot.firePoint.localPosition = new Vector3(0.86f, 0.13f, 0f); // Adjust relative to player
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, -75); // 45 degrees up from right
                 break;
             case FacingDirection.Left:
-                playerShoot.firePoint.localPosition = new Vector3(-0.707f, 0.707f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 75); // 45 degrees up from left
+                playerShoot.firePoint.localPosition = new Vector3(0.86f, 0.13f, 0f); // Adjust relative to player
+                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, -75); // 45 degrees up from left
                 break;
             default:
                 break;
         }
+        // End of remove
     }
 
     private void Fire(InputAction.CallbackContext context)

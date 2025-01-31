@@ -4,23 +4,36 @@ using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    [HideInInspector]public enum PlayerState { Idle, Shooting, Reloading, Dodging, Dead };
+    [HideInInspector]public enum PlayerState { Idle = 0, Shooting = 1, Reloading = 2, Dodging = 3, Dead = 4 };
 
     private PlayerState currentState = PlayerState.Idle;
     private PlayerShoot playerShoot;
+    private Animator playerAnimator;
 
 
     // Functions
     private void Awake()
     {
         playerShoot = GetComponent<PlayerShoot>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     // Add logic to make it for most states, you must be idle
     public void ChangeState(PlayerState _newState)
     {
         if (currentState == _newState) return; // Prevent switching to the same state
-        currentState = _newState;
+        if (currentState == PlayerState.Idle)
+        {
+            currentState = _newState;
+        }
+        else if (!(_newState == PlayerState.Shooting | _newState == PlayerState.Shooting | _newState == PlayerState.Shooting))
+        {
+            currentState = _newState;
+        }
+        else
+        {
+            return;
+        }
         Debug.Log($"Switched to {_newState} state");
 
         UpdateState();
@@ -28,22 +41,28 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void UpdateState()
     {
+        playerAnimator.SetInteger("State", (int)currentState);
         switch (currentState)
         {
             case PlayerState.Idle:
-                
+                playerAnimator.Play("Idle", 0, 0);
                 break;
             case PlayerState.Shooting:
-                StartCoroutine(HandleShootingState());
+                    StartCoroutine(HandleShootingState());
+                playerAnimator.Play("Shooting", 0, 0);
                 break;
             case PlayerState.Reloading:
+                playerAnimator.Play("Reloading", 0, 0);
+                    playerAnimator.SetTrigger("Reloading");
                 StartCoroutine(HandleReloadState());
                 break;
             case PlayerState.Dodging:
-                
+                    playerAnimator.Play("Dodging", 0, 0);
+                playerAnimator.SetTrigger("Dodging");
                 break;
             case PlayerState.Dead:
-                
+                playerAnimator.Play("Player_Die", 0, 0);
+                playerAnimator.SetTrigger("Dead");
                 break;
             default:
                 break;
@@ -52,15 +71,15 @@ public class PlayerStateMachine : MonoBehaviour
 
     private IEnumerator HandleShootingState()
     {
-        playerShoot.Shoot();
-        yield return new WaitForSeconds(playerShoot.shootDuration);
-        ChangeState(PlayerState.Idle);
+            playerShoot.Shoot();
+            yield return new WaitForSeconds(playerShoot.shootDuration);
+            ChangeState(PlayerState.Idle);
     }
 
     private IEnumerator HandleReloadState()
     {
-        yield return new WaitForSeconds(playerShoot.reloadDuration);
-        playerShoot.Reload();
-        ChangeState(PlayerState.Idle);
+            yield return new WaitForSeconds(playerShoot.reloadDuration);
+            playerShoot.Reload();
+            ChangeState(PlayerState.Idle);
     }
 }
