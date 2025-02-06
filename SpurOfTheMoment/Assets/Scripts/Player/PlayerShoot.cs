@@ -30,6 +30,8 @@ public class PlayerShoot : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(firePoint.rotation.eulerAngles.x, firePoint.rotation.eulerAngles.y, firePoint.rotation.eulerAngles.z));
             Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
             bulletRB.AddForce(firePoint.up * shootSpeed, ForceMode2D.Impulse);
+            Bullet bulletScript = bulletRB.GetComponent<Bullet>();
+            bulletScript.SetInitialSpeed(shootSpeed);
         }
     }
 

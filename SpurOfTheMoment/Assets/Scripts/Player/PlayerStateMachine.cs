@@ -8,6 +8,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private PlayerState currentState = PlayerState.Idle;
     private PlayerShoot playerShoot;
+    private PlayerHealth playerHealth;
     private Animator playerAnimator;
 
 
@@ -15,6 +16,7 @@ public class PlayerStateMachine : MonoBehaviour
     private void Awake()
     {
         playerShoot = GetComponent<PlayerShoot>();
+        playerHealth = GetComponent<PlayerHealth>();
         playerAnimator = GetComponent<Animator>();
     }
 
@@ -26,7 +28,7 @@ public class PlayerStateMachine : MonoBehaviour
         {
             currentState = _newState;
         }
-        else if (!(_newState == PlayerState.Shooting | _newState == PlayerState.Shooting | _newState == PlayerState.Shooting))
+        else if (!(_newState == PlayerState.Shooting || _newState == PlayerState.Reloading || _newState == PlayerState.Dodging))
         {
             currentState = _newState;
         }
@@ -59,6 +61,7 @@ public class PlayerStateMachine : MonoBehaviour
             case PlayerState.Dodging:
                     playerAnimator.Play("Dodging", 0, 0);
                 playerAnimator.SetTrigger("Dodging");
+                StartCoroutine(HandleDodgeState());
                 break;
             case PlayerState.Dead:
                 playerAnimator.Play("Player_Die", 0, 0);
@@ -81,5 +84,13 @@ public class PlayerStateMachine : MonoBehaviour
             yield return new WaitForSeconds(playerShoot.reloadDuration);
             playerShoot.Reload();
             ChangeState(PlayerState.Idle);
+    }
+
+    private IEnumerator HandleDodgeState()
+    {
+        playerHealth.Dodge(true);
+        yield return new WaitForSeconds(playerHealth.dodgeDuration);
+        playerHealth.Dodge(false);
+        ChangeState(PlayerState.Idle);
     }
 }

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private InputAction aim;
     private InputAction fire;
     private InputAction reload;
+    private InputAction dodge;
     private Vector2 aimDirection;
     private PlayerStateMachine playerStateMachine;
     private PlayerShoot playerShoot;
@@ -43,6 +44,10 @@ public class PlayerController : MonoBehaviour
         reload = playerControls.Player.Reload;
         reload.Enable();
         reload.performed += Reload;
+
+        dodge = playerControls.Player.Dodge;
+        dodge.Enable();
+        dodge.performed += Dodge;
     }
 
     private void OnDisable()
@@ -50,6 +55,7 @@ public class PlayerController : MonoBehaviour
         aim.Disable();
         fire.Disable();
         reload.Disable();
+        dodge.Disable();
     }
 
     private void Update()
@@ -110,5 +116,11 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Reload Input Received");
         playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Reloading);
+    }
+
+    private void Dodge(InputAction.CallbackContext context)
+    {
+        Debug.Log("Dodging");
+        playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Dodging);
     }
 }
