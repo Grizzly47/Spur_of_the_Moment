@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     private bool isBulletTimeActive = false;
     private List<Bullet> activeBullets = new List<Bullet>();
 
+    [SerializeField] private GameObject timePauseOverlay;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour
                 bullet.SetFrozen(isBulletTimeActive);
             }
         }
+
+        timePauseOverlay.SetActive(isBulletTimeActive);
     }
 
     public void RegisterBullet(Bullet bullet)
