@@ -4,7 +4,7 @@ using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    [HideInInspector] public enum PlayerState { Idle = 0, Shooting = 1, Reloading = 2, Dodging = 3, Dead = 4 };
+    [HideInInspector] public enum PlayerState { Idle = 0, Shooting = 1, Reloading = 2, Dodging = 3, Dead = 4, Stunned = 5 };
 
     private PlayerState currentState = PlayerState.Idle;
     private PlayerShoot playerShoot;
@@ -16,6 +16,8 @@ public class PlayerStateMachine : MonoBehaviour
         playerShoot = GetComponent<PlayerShoot>();
         playerHealth = GetComponent<PlayerHealth>();
         playerAnimator = GetComponent<Animator>();
+
+        GameManager.Instance.RegisterPlayer(this);
     }
 
     public void ChangeState(PlayerState newState)
@@ -61,6 +63,10 @@ public class PlayerStateMachine : MonoBehaviour
             case PlayerState.Dead:
                 playerAnimator.Play("Player_Die", 0, 0);
                 break;
+            case PlayerState.Stunned:
+                StartCoroutine(HandleStunState());
+                // Animator?
+                break;
         }
     }
 
@@ -83,6 +89,12 @@ public class PlayerStateMachine : MonoBehaviour
         playerHealth.Dodge(true);
         yield return new WaitForSeconds(playerHealth.dodgeDuration);
         playerHealth.Dodge(false);
+        ChangeState(PlayerState.Idle);
+    }
+
+    private IEnumerator HandleStunState()
+    {
+        yield return new WaitForSeconds(GameManager.Instance.stunTime); // Adjust stun duration as needed
         ChangeState(PlayerState.Idle);
     }
 }
