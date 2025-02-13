@@ -11,13 +11,20 @@ public class PlayerStateMachine : MonoBehaviour
     private PlayerHealth playerHealth;
     private Animator playerAnimator;
 
-    private void Awake()
+    private void Start()
     {
         playerShoot = GetComponent<PlayerShoot>();
         playerHealth = GetComponent<PlayerHealth>();
         playerAnimator = GetComponent<Animator>();
 
-        GameManager.Instance.RegisterPlayer(this);
+        if (GameManager.Instance != null) // Ensure GameManager exists
+        {
+            GameManager.Instance.RegisterPlayer(this);
+        }
+        else
+        {
+            Debug.LogError("GameManager Instance is NULL!");
+        }
     }
 
     public void ChangeState(PlayerState newState)

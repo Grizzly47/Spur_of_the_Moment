@@ -5,14 +5,12 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Sprite[] sprites;
     [SerializeField] private PlayerInputActions playerControls;
 
+    private PlayerInput playerInput;
+    private int playerIndex;
     private Transform playerTransform;
-    private InputAction aim;
-    private InputAction fire;
-    private InputAction reload;
-    private InputAction dodge;
+    private InputAction aim, fire, reload, dodge;
     private Vector2 aimDirection;
     private PlayerStateMachine playerStateMachine;
     private PlayerShoot playerShoot;
@@ -24,29 +22,36 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerInputActions();
-        playerControls.Enable();
         playerTransform = transform;
         playerStateMachine = GetComponent<PlayerStateMachine>();
         playerShoot = GetComponent<PlayerShoot>();
         playerAnimator = GetComponent<Animator>();
+
+        playerInput = GetComponent<PlayerInput>();
+        playerIndex = playerInput.playerIndex;
+
+        playerAnimator.SetInteger("PlayerIndex", (int)playerIndex);
+
+        Debug.Log($"{gameObject.name} assigned Player Index {playerIndex}");
+
+        AssignControls();
     }
 
-    private void OnEnable()
+    private void AssignControls()
     {
-        Debug.Log("Enabling Player Controls");
-        aim = playerControls.Player.Aim;
+        var playerMap = playerControls.Player;
+        aim = playerIndex == 0 ? playerMap.Aim_P1 : playerMap.Aim_P2;
+        fire = playerIndex == 0 ? playerMap.Attack_P1 : playerMap.Attack_P2;
+        reload = playerIndex == 0 ? playerMap.Reload_P1 : playerMap.Reload_P2;
+        dodge = playerIndex == 0 ? playerMap.Dodge_P1 : playerMap.Dodge_P2;
+
         aim.Enable();
-
-        fire = playerControls.Player.Attack;
         fire.Enable();
-        fire.performed += Fire;
-
-        reload = playerControls.Player.Reload;
         reload.Enable();
-        reload.performed += Reload;
-
-        dodge = playerControls.Player.Dodge;
         dodge.Enable();
+
+        fire.performed += Fire;
+        reload.performed += Reload;
         dodge.performed += Dodge;
     }
 
@@ -56,71 +61,50 @@ public class PlayerController : MonoBehaviour
         fire.Disable();
         reload.Disable();
         dodge.Disable();
+
+        fire.performed -= Fire;
+        reload.performed -= Reload;
+        dodge.performed -= Dodge;
     }
 
     private void Update()
     {
         aimDirection = aim.ReadValue<Vector2>();
-        // Trashy
-        if (aimDirection.y > 0f) // Aiming up
-        {
-            playerAnimator.SetInteger("Direction", 0);
-            playerTransform.localScale = new Vector3(1, 1, 1);
-            facingDirection = FacingDirection.Up;
-        }
-        else if (aimDirection.x > 0f) // Aiming right
-        {
-            playerAnimator.SetInteger("Direction", 2);
-            playerTransform.localScale = new Vector3(1, 1, 1);
-            facingDirection = FacingDirection.Right;
-        }
-        else if (aimDirection.x < 0f) // Aiming left
-        {
-            playerAnimator.SetInteger("Direction", 1);
-            playerTransform.localScale = new Vector3(-1, 1, 1);
-            facingDirection = FacingDirection.Left;
-        }
-        else
-        {
-            playerAnimator.SetInteger("Direction", 0);
-            facingDirection = FacingDirection.Up;
-        }
 
-        // Can be removed later
-        switch (facingDirection) 
+        // Optimized direction setting
+        facingDirection = aimDirection switch
         {
-            case FacingDirection.Up:
-                playerShoot.firePoint.localPosition = new Vector3(0, 1, 0);
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, 0);
-                break;
-            case FacingDirection.Right:
-                playerShoot.firePoint.localPosition = new Vector3(0.86f, 0.13f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, -75); // 45 degrees up from right
-                break;
-            case FacingDirection.Left:
-                playerShoot.firePoint.localPosition = new Vector3(0.86f, 0.13f, 0f); // Adjust relative to player
-                playerShoot.firePoint.localRotation = Quaternion.Euler(0, 0, -75); // 45 degrees up from left
-                break;
-            default:
-                break;
-        }
-        // End of remove
+            { y: > 0f } => FacingDirection.Up,
+            { x: > 0f } => FacingDirection.Right,
+            { x: < 0f } => FacingDirection.Left,
+            _ => facingDirection
+        };
+
+        playerAnimator.SetInteger("Direction", (int)facingDirection);
+        playerTransform.localScale = new Vector3(facingDirection == FacingDirection.Left ? -1 : 1, 1, 1);
+
+        // Optimized fire point positioning
+        Vector3 firePointPos = facingDirection switch
+        {
+            FacingDirection.Up => new Vector3(0, 1, 0),
+            FacingDirection.Right => new Vector3(0.86f, 0.13f, 0f),
+            FacingDirection.Left => new Vector3(-0.86f, 0.13f, 0f),
+            _ => playerShoot.firePoint.localPosition
+        };
+        Quaternion firePointRot = facingDirection == FacingDirection.Up
+            ? Quaternion.identity
+            : Quaternion.Euler(0, 0, -75);
+
+        playerShoot.firePoint.localPosition = firePointPos;
+        playerShoot.firePoint.localRotation = firePointRot;
     }
 
-    private void Fire(InputAction.CallbackContext context)
-    {
+    private void Fire(InputAction.CallbackContext context) =>
         playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Shooting);
-    }
 
-    private void Reload(InputAction.CallbackContext context)
-    {
-        Debug.Log("Reload Input Received");
+    private void Reload(InputAction.CallbackContext context) =>
         playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Reloading);
-    }
 
-    private void Dodge(InputAction.CallbackContext context)
-    {
-        Debug.Log("Dodging");
+    private void Dodge(InputAction.CallbackContext context) =>
         playerStateMachine.ChangeState(PlayerStateMachine.PlayerState.Dodging);
-    }
 }

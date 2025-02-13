@@ -28,7 +28,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ""id"": ""df70fa95-8a34-4494-b137-73ab6b9c7d37"",
             ""actions"": [
                 {
-                    ""name"": ""Aim"",
+                    ""name"": ""Aim_P1"",
                     ""type"": ""Value"",
                     ""id"": ""351f2ccd-1f9f-44bf-9bec-d62ac5c5f408"",
                     ""expectedControlType"": ""Vector2"",
@@ -37,7 +37,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""Aim_P2"",
+                    ""type"": ""Value"",
+                    ""id"": ""19b33831-bbc1-44bc-a748-d760b99a0cad"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Attack_P1"",
                     ""type"": ""Button"",
                     ""id"": ""6c2ab1b8-8984-453a-af3d-a3c78ae1679a"",
                     ""expectedControlType"": """",
@@ -46,7 +55,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Reload"",
+                    ""name"": ""Attack_P2"",
+                    ""type"": ""Button"",
+                    ""id"": ""84eda011-3b66-4abf-808d-0fe5711d063e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload_P1"",
                     ""type"": ""Button"",
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
                     ""expectedControlType"": """",
@@ -55,7 +73,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dodge"",
+                    ""name"": ""Reload_P2"",
+                    ""type"": ""Button"",
+                    ""id"": ""9e6653df-2765-45da-820c-6191704f69aa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dodge_P1"",
                     ""type"": ""Button"",
                     ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
                     ""expectedControlType"": """",
@@ -64,28 +91,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Crouch"",
+                    ""name"": ""Dodge_P2"",
                     ""type"": ""Button"",
-                    ""id"": ""27c5f898-bc57-4ee1-8800-db469aca5fe3"",
+                    ""id"": ""aa910861-a364-42a9-9401-889bbbfe4463"",
                     ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Previous"",
-                    ""type"": ""Button"",
-                    ""id"": ""2776c80d-3c14-4091-8c56-d04ced07a2b0"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Next"",
-                    ""type"": ""Button"",
-                    ""id"": ""b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba"",
-                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -99,7 +108,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -110,7 +119,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -121,18 +130,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""8180e8bd-4097-4f4e-ab88-4523101a6ce9"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -143,18 +141,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""1c5327b5-f71c-4f60-99c7-4e737386f1d1"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -165,18 +152,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""2e46982e-44cc-431b-9f0b-c11910bf467a"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -187,18 +163,73 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""862dd970-7d9d-464e-bea3-3a2718547ce9"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Aim_P2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Arrow_Keys"",
+                    ""id"": ""f482e953-d682-4842-8675-2b1d83982923"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim_P2"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""b60d36b2-16b4-48da-882a-976e33fe8d6e"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim_P2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""59c2a04b-9584-4ce1-baf1-b7d7877ada2f"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim_P2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""6c16f0a6-4bcc-42e0-98d5-fe3acf5ba8fa"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""77bff152-3580-4b21-b6de-dcd0c7e41164"",
+                    ""id"": ""645f893f-9715-44a2-9c36-767e5c083771"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -209,62 +240,51 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Attack_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Attack_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b3c1c7f0-bd20-4ee7-a0f1-899b24bca6d7"",
-                    ""path"": ""<Keyboard>/enter"",
+                    ""id"": ""54b10db8-494e-48e2-8df4-aad976d156fb"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Attack"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Attack_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cbac6039-9c09-46a1-b5f2-4e5124ccb5ed"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""id"": ""c02e671b-0819-4be1-979d-64eedf826932"",
+                    ""path"": ""<Keyboard>/comma"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Next"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e15ca19d-e649-4852-97d5-7fe8ccc44e94"",
-                    ""path"": ""<Gamepad>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Next"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Attack_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""eb40bb66-4559-4dfa-9a2f-820438abb426"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Dodge"",
+                    ""action"": ""Dodge_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -275,29 +295,29 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Dodge"",
+                    ""action"": ""Dodge_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1534dc16-a6aa-499d-9c3a-22b47347b52a"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""id"": ""eff4d301-bd13-4372-9337-7d8cf75c7f27"",
+                    ""path"": ""<Keyboard>/period"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Previous"",
+                    ""action"": ""Dodge_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""25060bbd-a3a6-476e-8fba-45ae484aad05"",
-                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""id"": ""c49dc163-0b74-472f-9499-9221e61e50c1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Previous"",
+                    ""action"": ""Dodge_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -308,7 +328,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Reload"",
+                    ""action"": ""Reload_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -319,29 +339,29 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Reload"",
+                    ""action"": ""Reload_P1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4f4649ac-64a8-4a73-af11-b3faef356a4d"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""36e52cba-0905-478e-a818-f4bfcb9f3b9a"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""id"": ""2a107483-6e85-4279-96ed-970faa8fb07e"",
+                    ""path"": ""<Keyboard>/slash"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Crouch"",
+                    ""action"": ""Reload_P2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c32f0170-6dba-47ce-9523-4661a4bbc937"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Reload_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -929,13 +949,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
-        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
-        m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
-        m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
-        m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
-        m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
+        m_Player_Aim_P1 = m_Player.FindAction("Aim_P1", throwIfNotFound: true);
+        m_Player_Aim_P2 = m_Player.FindAction("Aim_P2", throwIfNotFound: true);
+        m_Player_Attack_P1 = m_Player.FindAction("Attack_P1", throwIfNotFound: true);
+        m_Player_Attack_P2 = m_Player.FindAction("Attack_P2", throwIfNotFound: true);
+        m_Player_Reload_P1 = m_Player.FindAction("Reload_P1", throwIfNotFound: true);
+        m_Player_Reload_P2 = m_Player.FindAction("Reload_P2", throwIfNotFound: true);
+        m_Player_Dodge_P1 = m_Player.FindAction("Dodge_P1", throwIfNotFound: true);
+        m_Player_Dodge_P2 = m_Player.FindAction("Dodge_P2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1015,24 +1036,26 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Aim;
-    private readonly InputAction m_Player_Attack;
-    private readonly InputAction m_Player_Reload;
-    private readonly InputAction m_Player_Dodge;
-    private readonly InputAction m_Player_Crouch;
-    private readonly InputAction m_Player_Previous;
-    private readonly InputAction m_Player_Next;
+    private readonly InputAction m_Player_Aim_P1;
+    private readonly InputAction m_Player_Aim_P2;
+    private readonly InputAction m_Player_Attack_P1;
+    private readonly InputAction m_Player_Attack_P2;
+    private readonly InputAction m_Player_Reload_P1;
+    private readonly InputAction m_Player_Reload_P2;
+    private readonly InputAction m_Player_Dodge_P1;
+    private readonly InputAction m_Player_Dodge_P2;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Aim => m_Wrapper.m_Player_Aim;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
-        public InputAction @Reload => m_Wrapper.m_Player_Reload;
-        public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
-        public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
-        public InputAction @Previous => m_Wrapper.m_Player_Previous;
-        public InputAction @Next => m_Wrapper.m_Player_Next;
+        public InputAction @Aim_P1 => m_Wrapper.m_Player_Aim_P1;
+        public InputAction @Aim_P2 => m_Wrapper.m_Player_Aim_P2;
+        public InputAction @Attack_P1 => m_Wrapper.m_Player_Attack_P1;
+        public InputAction @Attack_P2 => m_Wrapper.m_Player_Attack_P2;
+        public InputAction @Reload_P1 => m_Wrapper.m_Player_Reload_P1;
+        public InputAction @Reload_P2 => m_Wrapper.m_Player_Reload_P2;
+        public InputAction @Dodge_P1 => m_Wrapper.m_Player_Dodge_P1;
+        public InputAction @Dodge_P2 => m_Wrapper.m_Player_Dodge_P2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1042,52 +1065,58 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Aim.started += instance.OnAim;
-            @Aim.performed += instance.OnAim;
-            @Aim.canceled += instance.OnAim;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
-            @Reload.started += instance.OnReload;
-            @Reload.performed += instance.OnReload;
-            @Reload.canceled += instance.OnReload;
-            @Dodge.started += instance.OnDodge;
-            @Dodge.performed += instance.OnDodge;
-            @Dodge.canceled += instance.OnDodge;
-            @Crouch.started += instance.OnCrouch;
-            @Crouch.performed += instance.OnCrouch;
-            @Crouch.canceled += instance.OnCrouch;
-            @Previous.started += instance.OnPrevious;
-            @Previous.performed += instance.OnPrevious;
-            @Previous.canceled += instance.OnPrevious;
-            @Next.started += instance.OnNext;
-            @Next.performed += instance.OnNext;
-            @Next.canceled += instance.OnNext;
+            @Aim_P1.started += instance.OnAim_P1;
+            @Aim_P1.performed += instance.OnAim_P1;
+            @Aim_P1.canceled += instance.OnAim_P1;
+            @Aim_P2.started += instance.OnAim_P2;
+            @Aim_P2.performed += instance.OnAim_P2;
+            @Aim_P2.canceled += instance.OnAim_P2;
+            @Attack_P1.started += instance.OnAttack_P1;
+            @Attack_P1.performed += instance.OnAttack_P1;
+            @Attack_P1.canceled += instance.OnAttack_P1;
+            @Attack_P2.started += instance.OnAttack_P2;
+            @Attack_P2.performed += instance.OnAttack_P2;
+            @Attack_P2.canceled += instance.OnAttack_P2;
+            @Reload_P1.started += instance.OnReload_P1;
+            @Reload_P1.performed += instance.OnReload_P1;
+            @Reload_P1.canceled += instance.OnReload_P1;
+            @Reload_P2.started += instance.OnReload_P2;
+            @Reload_P2.performed += instance.OnReload_P2;
+            @Reload_P2.canceled += instance.OnReload_P2;
+            @Dodge_P1.started += instance.OnDodge_P1;
+            @Dodge_P1.performed += instance.OnDodge_P1;
+            @Dodge_P1.canceled += instance.OnDodge_P1;
+            @Dodge_P2.started += instance.OnDodge_P2;
+            @Dodge_P2.performed += instance.OnDodge_P2;
+            @Dodge_P2.canceled += instance.OnDodge_P2;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @Aim.started -= instance.OnAim;
-            @Aim.performed -= instance.OnAim;
-            @Aim.canceled -= instance.OnAim;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
-            @Reload.started -= instance.OnReload;
-            @Reload.performed -= instance.OnReload;
-            @Reload.canceled -= instance.OnReload;
-            @Dodge.started -= instance.OnDodge;
-            @Dodge.performed -= instance.OnDodge;
-            @Dodge.canceled -= instance.OnDodge;
-            @Crouch.started -= instance.OnCrouch;
-            @Crouch.performed -= instance.OnCrouch;
-            @Crouch.canceled -= instance.OnCrouch;
-            @Previous.started -= instance.OnPrevious;
-            @Previous.performed -= instance.OnPrevious;
-            @Previous.canceled -= instance.OnPrevious;
-            @Next.started -= instance.OnNext;
-            @Next.performed -= instance.OnNext;
-            @Next.canceled -= instance.OnNext;
+            @Aim_P1.started -= instance.OnAim_P1;
+            @Aim_P1.performed -= instance.OnAim_P1;
+            @Aim_P1.canceled -= instance.OnAim_P1;
+            @Aim_P2.started -= instance.OnAim_P2;
+            @Aim_P2.performed -= instance.OnAim_P2;
+            @Aim_P2.canceled -= instance.OnAim_P2;
+            @Attack_P1.started -= instance.OnAttack_P1;
+            @Attack_P1.performed -= instance.OnAttack_P1;
+            @Attack_P1.canceled -= instance.OnAttack_P1;
+            @Attack_P2.started -= instance.OnAttack_P2;
+            @Attack_P2.performed -= instance.OnAttack_P2;
+            @Attack_P2.canceled -= instance.OnAttack_P2;
+            @Reload_P1.started -= instance.OnReload_P1;
+            @Reload_P1.performed -= instance.OnReload_P1;
+            @Reload_P1.canceled -= instance.OnReload_P1;
+            @Reload_P2.started -= instance.OnReload_P2;
+            @Reload_P2.performed -= instance.OnReload_P2;
+            @Reload_P2.canceled -= instance.OnReload_P2;
+            @Dodge_P1.started -= instance.OnDodge_P1;
+            @Dodge_P1.performed -= instance.OnDodge_P1;
+            @Dodge_P1.canceled -= instance.OnDodge_P1;
+            @Dodge_P2.started -= instance.OnDodge_P2;
+            @Dodge_P2.performed -= instance.OnDodge_P2;
+            @Dodge_P2.canceled -= instance.OnDodge_P2;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1270,13 +1299,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnAim(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
-        void OnReload(InputAction.CallbackContext context);
-        void OnDodge(InputAction.CallbackContext context);
-        void OnCrouch(InputAction.CallbackContext context);
-        void OnPrevious(InputAction.CallbackContext context);
-        void OnNext(InputAction.CallbackContext context);
+        void OnAim_P1(InputAction.CallbackContext context);
+        void OnAim_P2(InputAction.CallbackContext context);
+        void OnAttack_P1(InputAction.CallbackContext context);
+        void OnAttack_P2(InputAction.CallbackContext context);
+        void OnReload_P1(InputAction.CallbackContext context);
+        void OnReload_P2(InputAction.CallbackContext context);
+        void OnDodge_P1(InputAction.CallbackContext context);
+        void OnDodge_P2(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
