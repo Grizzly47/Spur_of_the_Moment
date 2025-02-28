@@ -1,15 +1,17 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerStateMachine : MonoBehaviour
 {
-    [HideInInspector] public enum PlayerState { Idle = 0, Shooting = 1, Reloading = 2, Dodging = 3, Dead = 4, Stunned = 5 };
+    [HideInInspector] public enum PlayerState { Idle = 0, Shooting = 1, Reloading = 2, Dodging = 3, Dead = 4, Stunned = 5};
 
     private PlayerState currentState = PlayerState.Idle;
     private PlayerShoot playerShoot;
     private PlayerHealth playerHealth;
     private Animator playerAnimator;
+    private Coroutine activeCoroutine;
 
     private void Start()
     {
@@ -17,7 +19,7 @@ public class PlayerStateMachine : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
         playerAnimator = GetComponent<Animator>();
 
-        if (GameManager.Instance != null) // Ensure GameManager exists
+        if (GameManager.Instance != null)
         {
             GameManager.Instance.RegisterPlayer(this);
         }
@@ -25,23 +27,40 @@ public class PlayerStateMachine : MonoBehaviour
         {
             Debug.LogError("GameManager Instance is NULL!");
         }
+
+        // Ensure Idle animation plays on start
+        ExecuteStateChange(PlayerState.Idle);
+    }
+
+    public PlayerState GetCurrentState()
+    {
+        return currentState;
     }
 
     public void ChangeState(PlayerState newState)
     {
-        if (currentState == newState) return; // Prevent redundant state change
-
-        // Allow changing to any state from Idle, but prevent changing between action states
-        if (currentState != PlayerState.Idle && newState != PlayerState.Idle)
+        if (currentState == newState || (currentState != PlayerState.Idle && newState != PlayerState.Idle))
         {
-            return;
+            Debug.Log("Redundant state change or invalid transition");
+            return; // Prevent redundant state change or invalid transitions
         }
 
+        int playerIndex = GetComponent<PlayerInput>().playerIndex;
+        Debug.Log("Changing " + playerIndex + " from " + currentState + " to " + newState);
+        GameManager.Instance.QueuePlayerAction(playerIndex, newState);
+    }
+
+    public void ResetToIdle()
+    {
+        int playerIndex = GetComponent<PlayerInput>().playerIndex;
+        ExecuteStateChange(PlayerState.Idle);
+        GameManager.Instance.ClearQueuedAction(playerIndex);
+    }
+
+    public void ExecuteStateChange(PlayerState newState)
+    {
         currentState = newState;
         Debug.Log($"Switched to {newState} state");
-
-        // Toggle bullet time based on Idle state
-        GameManager.Instance.ToggleBulletTime(currentState == PlayerState.Idle);
 
         UpdateState();
     }
@@ -77,31 +96,81 @@ public class PlayerStateMachine : MonoBehaviour
         }
     }
 
+    public void SetAnimationPaused(bool pause)
+    {
+        if (playerAnimator != null)
+        {
+            playerAnimator.speed = pause ? 0 : 1; // 0 = pause, 1 = resume
+        }
+    }
+
     private IEnumerator HandleShootingState()
     {
         playerShoot.Shoot();
-        yield return new WaitForSeconds(playerShoot.shootDuration);
-        ChangeState(PlayerState.Idle);
+
+        float timer = 0f;
+        while (timer < playerShoot.shootDuration)
+        {
+            if (!GameManager.Instance.IsBulletTimeActive()) // Only count time when bullet time is off
+            {
+                timer += Time.deltaTime;
+            }
+            yield return null; // Wait for next frame
+        }
+
+        ResetToIdle();
     }
+
 
     private IEnumerator HandleReloadState()
     {
-        yield return new WaitForSeconds(playerShoot.reloadDuration);
+        float timer = 0f;
+        while (timer < playerShoot.reloadDuration)
+        {
+            if (!GameManager.Instance.IsBulletTimeActive())
+            {
+                timer += Time.deltaTime;
+            }
+            yield return null;
+        }
+
         playerShoot.Reload();
-        ChangeState(PlayerState.Idle);
+        ResetToIdle();
     }
+
 
     private IEnumerator HandleDodgeState()
     {
         playerHealth.Dodge(true);
-        yield return new WaitForSeconds(playerHealth.dodgeDuration);
+
+        float timer = 0f;
+        while (timer < playerHealth.dodgeDuration)
+        {
+            if (!GameManager.Instance.IsBulletTimeActive())
+            {
+                timer += Time.deltaTime;
+            }
+            yield return null;
+        }
+
         playerHealth.Dodge(false);
-        ChangeState(PlayerState.Idle);
+        ResetToIdle();
     }
+
 
     private IEnumerator HandleStunState()
     {
-        yield return new WaitForSeconds(GameManager.Instance.stunTime); // Adjust stun duration as needed
-        ChangeState(PlayerState.Idle);
+        float timer = 0f;
+        while (timer < GameManager.Instance.stunTime)
+        {
+            if (!GameManager.Instance.IsBulletTimeActive())
+            {
+                timer += Time.deltaTime;
+            }
+            yield return null;
+        }
+
+        ResetToIdle();
     }
+
 }

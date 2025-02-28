@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static PlayerStateMachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,15 +28,20 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject playerPrefab; // Player prefab to spawn both players
 
+    private PlayerState queuedActionP1 = PlayerState.Idle;
+    private PlayerState queuedActionP2 = PlayerState.Idle;
+    private bool isPlayer1Idle = true;
+    private bool isPlayer2Idle = true;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
         currentHeatTime = maxHeatTime;
-        ToggleBulletTime(true);
-
         SpawnPlayers();
+
+        ToggleBulletTime(true);
     }
 
     private void SpawnPlayers()
@@ -75,14 +81,90 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void QueuePlayerAction(int playerIndex, PlayerState action)
+    {
+        // Get opponent index
+        int opponentIndex = (playerIndex == 0) ? 1 : 0;
+
+        // Get player state
+        PlayerStateMachine player = players[playerIndex];
+        PlayerStateMachine opponent = players[opponentIndex];
+
+        // If player is not in Idle, they CANNOT act, so ignore the input
+        if (player.GetCurrentState() != PlayerState.Idle)
+        {
+            return;
+        }
+
+        // Queue the action
+        if (playerIndex == 0) queuedActionP1 = action;
+        else queuedActionP2 = action;
+
+        Debug.Log($"Player {playerIndex} queued action: {action}");
+
+        // Check if the opponent is Idle
+        if (opponent.GetCurrentState() == PlayerState.Idle)
+        {
+            Debug.Log($"Player {playerIndex} is waiting for Player {opponentIndex} to act...");
+            return; // Wait until opponent acts
+        }
+
+        // If opponent is NOT Idle, execute the state change immediately
+        ExecuteQueuedActions();
+    }
+
+    private void ExecuteQueuedActions()
+    {
+        Debug.Log("Executing queued actions...");
+
+        // Execute for Player 1 if their state is changing
+        if (players[0].GetCurrentState() != queuedActionP1)
+        {
+            players[0].ExecuteStateChange(queuedActionP1);
+            Debug.Log($"Player 1 changed state to {queuedActionP1}");
+        }
+
+        // Execute for Player 2 if their state is changing
+        if (players[1].GetCurrentState() != queuedActionP2)
+        {
+            players[1].ExecuteStateChange(queuedActionP2);
+            Debug.Log($"Player 2 changed state to {queuedActionP2}");
+        }
+
+        ToggleBulletTime(false);
+    }
+
+    public void ClearQueuedAction(int playerIndex)
+    {
+        if (playerIndex == 0) queuedActionP1 = PlayerState.Idle;
+        else queuedActionP2 = PlayerState.Idle;
+
+        Debug.Log($"Player {playerIndex} action cleared, now Idle.");
+
+        ToggleBulletTime(true);
+    }
+
     public void ToggleBulletTime(bool isActive)
     {
         isBulletTimeActive = isActive;
+
+        // Freeze/unfreeze bullets
         foreach (var bullet in activeBullets)
         {
             bullet?.SetFrozen(isBulletTimeActive);
         }
 
+        // Pause the animation for the player who is NOT Idle
+        if (players[0].GetCurrentState() != PlayerState.Idle)
+        {
+            players[0].SetAnimationPaused(isActive);
+        }
+        if (players[1].GetCurrentState() != PlayerState.Idle)
+        {
+            players[1].SetAnimationPaused(isActive);
+        }
+
+        // Reset heat timer and reduce max heat duration over time
         if (isBulletTimeActive)
         {
             heatTimer = currentHeatTime;
@@ -98,8 +180,14 @@ public class GameManager : MonoBehaviour
 
     private void ForcePlayersStun()
     {
-        players.ForEach(player => player.ChangeState(PlayerStateMachine.PlayerState.Stunned));
-        ToggleBulletTime(false);
+        if (queuedActionP1 == PlayerState.Idle) queuedActionP1 = PlayerState.Stunned;
+        if (queuedActionP2 == PlayerState.Idle) queuedActionP2 = PlayerState.Stunned;
+
+        // cut
+        isPlayer1Idle = false;
+        isPlayer2Idle = false;
+
+        ExecuteQueuedActions();
     }
 
     private void ShowHeatBar(bool isVisible)
@@ -113,5 +201,10 @@ public class GameManager : MonoBehaviour
     private void UpdateHeatBar()
     {
         if (heatBar != null) heatBar.value = heatTimer;
+    }
+
+    public bool IsBulletTimeActive()
+    {
+        return isBulletTimeActive;
     }
 }
