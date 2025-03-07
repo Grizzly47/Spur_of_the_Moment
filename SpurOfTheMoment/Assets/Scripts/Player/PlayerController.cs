@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
             playerAnimator.SetInteger("Direction", (int)facingDirection);
             playerTransform.localScale = new Vector3(facingDirection == FacingDirection.Left ? -1 : 1, 1, 1);
 
-            // Optimized direction setting
+            // Set Direction For aimaing
             facingDirection = aimDirection switch
             {
                 { y: > 0f } when playerIndex == 0 => FacingDirection.Up,
@@ -88,22 +88,22 @@ public class PlayerController : MonoBehaviour
                 _ => facingDirection
             };
 
-            // Optimized fire point positioning
+            // Position firepoint
             Vector3 firePointPos = facingDirection switch
             {
                 FacingDirection.Up => new Vector3(0, 1, 0),
                 FacingDirection.Down => new Vector3(0, -1, 0),
-                FacingDirection.Right => new Vector3(0.86f, 0.13f, 0f),
-                FacingDirection.Left => new Vector3(0.86f, 0.13f, 0f),
+                FacingDirection.Right => new Vector3(1.0f, 0f, 0f),
+                FacingDirection.Left => new Vector3(1.0f, 0f, 0f),
                 _ => playerShoot.firePoint.localPosition
             };
 
             Quaternion firePointRot = facingDirection switch
             {
-                FacingDirection.Up => Quaternion.identity,
-                FacingDirection.Down => Quaternion.Euler(0, 0, 180),
-                FacingDirection.Left => playerIndex == 0 ? Quaternion.Euler(0, 0, -75) : Quaternion.Euler(0, 0, 255),
-                FacingDirection.Right => playerIndex == 0 ? Quaternion.Euler(0, 0, -75) : Quaternion.Euler(0, 0, 255),
+                FacingDirection.Up => Quaternion.Euler(0, 0, 90),
+                FacingDirection.Down => Quaternion.Euler(0, 0, 270),
+                FacingDirection.Left => playerIndex == 0 ? Quaternion.Euler(0, 0, 201.801f) : Quaternion.Euler(0, 0, -201.801f),
+                FacingDirection.Right => playerIndex == 0 ? Quaternion.Euler(0, 0, 21.801f) : Quaternion.Euler(0, 0, -21.801f),
                 _ => Quaternion.identity
             };
 

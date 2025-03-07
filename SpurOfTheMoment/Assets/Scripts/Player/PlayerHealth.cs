@@ -22,4 +22,12 @@ public class PlayerHealth : Health
         if (isDodging) return;
         base.TakeDamage(damage);
     }
+
+    protected override void Die()
+    {
+        Debug.Log($"{gameObject.name} died!");
+
+        // Change player state to Dead
+        GetComponent<PlayerStateMachine>().ExecuteStateChange(PlayerStateMachine.PlayerState.Dead);
+    }
 }

@@ -114,6 +114,9 @@ MonoBehaviour:
   wallLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   maxBounces: 3
 --- !u!212 &6364295611593140400
 SpriteRenderer:

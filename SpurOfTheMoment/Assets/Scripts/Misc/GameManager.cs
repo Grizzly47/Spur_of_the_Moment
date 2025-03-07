@@ -33,11 +33,14 @@ public class GameManager : MonoBehaviour
     private bool isPlayer1Idle = true;
     private bool isPlayer2Idle = true;
 
+    private bool isGameOver = false;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
+        Time.timeScale = 1;
         currentHeatTime = maxHeatTime;
         SpawnPlayers();
 
@@ -146,33 +149,36 @@ public class GameManager : MonoBehaviour
 
     public void ToggleBulletTime(bool isActive)
     {
-        isBulletTimeActive = isActive;
-
-        // Freeze/unfreeze bullets
-        foreach (var bullet in activeBullets)
+        if (!isGameOver)
         {
-            bullet?.SetFrozen(isBulletTimeActive);
-        }
+            isBulletTimeActive = isActive;
 
-        // Pause the animation for the player who is NOT Idle
-        if (players[0].GetCurrentState() != PlayerState.Idle)
-        {
-            players[0].SetAnimationPaused(isActive);
-        }
-        if (players[1].GetCurrentState() != PlayerState.Idle)
-        {
-            players[1].SetAnimationPaused(isActive);
-        }
+            // Freeze/unfreeze bullets
+            foreach (var bullet in activeBullets)
+            {
+                bullet?.SetFrozen(isBulletTimeActive);
+            }
 
-        // Reset heat timer and reduce max heat duration over time
-        if (isBulletTimeActive)
-        {
-            heatTimer = currentHeatTime;
-            currentHeatTime = Mathf.Max(minHeatTime, currentHeatTime - heatReductionPerTurn);
-        }
+            // Pause the animation for the player who is NOT Idle
+            if (players[0].GetCurrentState() != PlayerState.Idle)
+            {
+                players[0].SetAnimationPaused(isActive);
+            }
+            if (players[1].GetCurrentState() != PlayerState.Idle)
+            {
+                players[1].SetAnimationPaused(isActive);
+            }
 
-        ShowHeatBar(isBulletTimeActive);
-        timePauseOverlay.SetActive(isBulletTimeActive);
+            // Reset heat timer and reduce max heat duration over time
+            if (isBulletTimeActive)
+            {
+                heatTimer = currentHeatTime;
+                currentHeatTime = Mathf.Max(minHeatTime, currentHeatTime - heatReductionPerTurn);
+            }
+
+            ShowHeatBar(isBulletTimeActive);
+            timePauseOverlay.SetActive(isBulletTimeActive);
+        }
     }
 
     public void RegisterBullet(Bullet bullet) => activeBullets.Add(bullet);
@@ -206,5 +212,37 @@ public class GameManager : MonoBehaviour
     public bool IsBulletTimeActive()
     {
         return isBulletTimeActive;
+    }
+
+    public void PlayerDied(PlayerStateMachine deadPlayer)
+    {
+        if (isGameOver) return; // Prevent multiple calls
+
+        Debug.Log($"Player {players.IndexOf(deadPlayer)} died!");
+        isGameOver = true; // Mark game as over
+
+        // Determine the winner
+        PlayerStateMachine winner = players.Find(p => p != deadPlayer);
+        string winnerMessage = winner != null ? $"Player {players.IndexOf(winner) + 1} Wins!" : "Draw!";
+
+        // Stop all player actions
+        foreach (var player in players)
+        {
+            player.ExecuteStateChange(PlayerStateMachine.PlayerState.Stunned); // Or create a "GameOver" state
+        }
+
+        // Show Game Over UI
+        ShowGameOverScreen(winnerMessage);
+    }
+
+    private void ShowGameOverScreen(string message)
+    {
+        Time.timeScale = 0;
+        GameOverUI.Instance.ShowGameOver(message);
+    }
+
+    public bool IsGameOver()
+    {
+        return isGameOver;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private LayerMask wallLayerMask;
+    [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private int maxBounces = 3;
     private int bounceCount = 0;
     private float bulletSpeed;
@@ -50,6 +51,14 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (((1 << collision.gameObject.layer) & playerLayerMask) != 0)
+        {
+            Debug.Log("HIT");
+            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(1);
+            Destroy(gameObject);
+            return;
+        }
+
         if (((1 << collision.gameObject.layer) & wallLayerMask) != 0)
         {
             if (bounceCount < maxBounces)

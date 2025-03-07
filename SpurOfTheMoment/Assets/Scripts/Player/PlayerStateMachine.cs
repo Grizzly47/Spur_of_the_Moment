@@ -39,6 +39,12 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ChangeState(PlayerState newState)
     {
+        if (currentState == PlayerState.Dead || GameManager.Instance.IsGameOver())
+        {
+            Debug.Log("Cannot change state, game is over!");
+            return;
+        }
+
         if (currentState == newState || (currentState != PlayerState.Idle && newState != PlayerState.Idle))
         {
             Debug.Log("Redundant state change or invalid transition");
@@ -52,6 +58,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ResetToIdle()
     {
+        if (currentState == PlayerState.Dead) return;
         int playerIndex = GetComponent<PlayerInput>().playerIndex;
         ExecuteStateChange(PlayerState.Idle);
         GameManager.Instance.ClearQueuedAction(playerIndex);
@@ -59,6 +66,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ExecuteStateChange(PlayerState newState)
     {
+        if (currentState == PlayerState.Dead) return;
         currentState = newState;
         Debug.Log($"Switched to {newState} state");
 
@@ -88,6 +96,7 @@ public class PlayerStateMachine : MonoBehaviour
                 break;
             case PlayerState.Dead:
                 playerAnimator.Play("Player_Die", 0, 0);
+                StartCoroutine(HandleDeathState());
                 break;
             case PlayerState.Stunned:
                 StartCoroutine(HandleStunState());
@@ -121,7 +130,6 @@ public class PlayerStateMachine : MonoBehaviour
         ResetToIdle();
     }
 
-
     private IEnumerator HandleReloadState()
     {
         float timer = 0f;
@@ -137,7 +145,6 @@ public class PlayerStateMachine : MonoBehaviour
         playerShoot.Reload();
         ResetToIdle();
     }
-
 
     private IEnumerator HandleDodgeState()
     {
@@ -157,7 +164,6 @@ public class PlayerStateMachine : MonoBehaviour
         ResetToIdle();
     }
 
-
     private IEnumerator HandleStunState()
     {
         float timer = 0f;
@@ -170,7 +176,17 @@ public class PlayerStateMachine : MonoBehaviour
             yield return null;
         }
 
-        ResetToIdle();
+        if (currentState != PlayerState.Dead) ResetToIdle();
     }
 
+    private IEnumerator HandleDeathState()
+    {
+        if (playerAnimator != null)
+        {
+            AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+            yield return new WaitForSeconds(stateInfo.length);
+        }
+
+        GameManager.Instance.PlayerDied(this);
+    }
 }
